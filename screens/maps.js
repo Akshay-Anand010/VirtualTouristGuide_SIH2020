@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import MapView, { Marker, Callout, Polygon } from "react-native-maps";
+
 import {
   StyleSheet,
   Text,
@@ -14,20 +15,34 @@ import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
 
 class Maps extends Component {
+  componentDidMount=()=>{
+    
+    this.findCurrentLocationAsync();
+    this.findCurrentLocation();
+    
+  }
+
   state = {
     location: null,
     errorMessage: null,
   };
+
+  
 
   findCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const latitude = JSON.stringify(position.coords.latitude);
         const longitude = JSON.stringify(position.coords.longitude);
-
+        console.log(latitude+latitude)
+        let region={
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.22,
+          longitudeDelta: 0.0421,
+        }
         this.setState({
-          latitude,
-          longitude,
+          initialPosition:region
         });
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
@@ -42,7 +57,7 @@ class Maps extends Component {
         errorMessage: "Permission to access location was denied",
       });
     }
-
+    console.log('Android granted!')
     let location = await Location.getCurrentPositionAsync({});
     this.setState({ location });
   };
@@ -60,7 +75,7 @@ class Maps extends Component {
   };
 
   render() {
-    let text = "";
+    let text=""
     if (this.state.errorMessage) {
       text = this.state.errorMessage;
     } else if (this.state.location) {
@@ -69,14 +84,11 @@ class Maps extends Component {
     return (
       <View style={styles.container}>
         <MapView
+          ref={map=>this._map=map}
           style={styles.mapStyle}
           showsUserLocation={true}
-          initialRegion={{
-            latitude: 15.496777,
-            longitude: 73.827827,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
+          initialRegion={this.state.initialPosition}
+          
         >
           <Polygon
             coordinates={[
@@ -126,14 +138,13 @@ class Maps extends Component {
               <Image source={require("../assets/png2.png")} />
             </Callout>
           </Marker>
+
+
+          
+
+
         </MapView>
-        <TouchableOpacity
-          onPress={this.findCurrentLocationAsync}
-          style={styles.btn}
-        >
-          <Text style={styles.te}> Where am I? </Text>
-          <Text style={styles.te}>{text}</Text>
-        </TouchableOpacity>
+        
       </View>
     );
   }
@@ -145,10 +156,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+
   },
+  
   mapStyle: {
     width: Dimensions.get("window").width,
-    height: 400,
+    height: Dimensions.get("window").height,
   },
   te: {
     color: "red",
