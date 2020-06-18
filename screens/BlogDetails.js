@@ -78,13 +78,13 @@ class Dashboard extends Component {
           ItemSeparatorComponent={this.FlatListItemSeparator}
           renderItem={({ item }) => (
             <View style={styles.flatview}>
-              <Text>{item.Name}</Text>
+              <Text>{item.name}</Text>
               <Text>{item.Tag}</Text>
               <Text style={styles.small}>{item.Description}</Text>
               <Image
                 style={styles.tinyLogo}
                 source={{
-                  uri: item.Image,
+                  uri: item.image,
                 }}
               />
             </View>
