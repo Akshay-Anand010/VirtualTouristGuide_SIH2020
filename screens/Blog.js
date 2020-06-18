@@ -15,7 +15,7 @@ import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import Icon1 from "react-native-vector-icons/MaterialIcons";
-import BlogDetails from "./BlogDetails";
+import Dashboard from "./BlogDetails";
 import Home from "./Home";
 import Maps from "./maps";
 import explore from "./explore";
@@ -23,7 +23,7 @@ import explore from "./explore";
 const TabNavigator = createMaterialBottomTabNavigator(
   {
     Home: {
-      screen: BlogDetails,
+      screen: Dashboard,
       navigationOptions: {
         tabBarLabel: "Home",
         tabBarIcon: ({ tintColor }) => (
