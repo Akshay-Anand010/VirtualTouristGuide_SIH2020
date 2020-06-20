@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import * as Speech from "expo-speech";
 import {
   AppRegistry,
   StyleSheet,
@@ -9,10 +9,18 @@ import {
   Alert,
   ActivityIndicator,
   Platform,
-  Image,
+  Button,
 } from "react-native";
+import Image from "react-native-image-progress";
+import * as Font from "expo-font";
+import ProgressBar from "react-native-progress/Bar";
 
 class Dashboard extends Component {
+  speak() {
+    var thingToSay = "0";
+    Speech.speak(thingToSay);
+  }
+
   constructor(props) {
     super(props);
 
@@ -48,6 +56,10 @@ class Dashboard extends Component {
       .catch((error) => {
         console.error(error);
       });
+
+    Font.loadAsync({
+      "Pacifico-Regular": require("../fonts/Pacifico-Regular.ttf"),
+    });
   }
 
   FlatListItemSeparator = () => {
@@ -78,15 +90,30 @@ class Dashboard extends Component {
           ItemSeparatorComponent={this.FlatListItemSeparator}
           renderItem={({ item }) => (
             <View style={styles.flatview}>
-              <Text>{item.name}</Text>
-              <Text>{item.Tag}</Text>
-              <Text style={styles.small}>{item.Description}</Text>
+              <Text style={styles.t1}>{item.name}</Text>
+              <Text style={styles.t2}>{item.Tag}</Text>
               <Image
                 style={styles.tinyLogo}
+                indicator={ProgressBar}
                 source={{
                   uri: item.image,
                 }}
               />
+              <Text style={styles.small}>{item.Description}</Text>
+
+              <View style={styles.card}>
+                <Button
+                  title="Speak!"
+                  onPress={() => Speech.speak(item.Description)}
+                  style={styles.new1}
+                />
+
+                <Button
+                  title="Stop"
+                  onPress={() => Speech.stop()}
+                  style={styles.new2}
+                />
+              </View>
             </View>
           )}
           keyExtractor={(item, index) => index}
@@ -107,8 +134,17 @@ const styles = StyleSheet.create({
   },
   flatview: {
     justifyContent: "center",
-    paddingTop: 30,
+    paddingTop: 5,
     borderRadius: 2,
+
+    textAlign: "center",
+    backgroundColor: "#ebebe0",
+    borderRadius: 5,
+    borderColor: "#ccccb3",
+    borderWidth: 5,
+    marginTop: 5,
+    marginLeft: 10,
+    marginRight: 10,
   },
   FlatListItemStyle: {
     padding: 10,
@@ -118,5 +154,27 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 300,
     height: 300,
+  },
+  card: {
+    flex: 1,
+    marginTop: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  t1: {
+    fontFamily: "Pacifico-Regular",
+    fontSize: 30,
+    alignContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  t2: {},
+  new1: {
+    marginLeft: 10,
+    marginTop: 10,
+    alignItems: "center",
+  },
+  new2: {
+    marginRight: 10,
   },
 });
