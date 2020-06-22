@@ -19,6 +19,7 @@ import Dashboard from "./BlogDetails";
 import Home from "./Home";
 import Maps from "./maps";
 import explore from "./explore";
+import chatbot from "./explore";
 
 const TabNavigator = createMaterialBottomTabNavigator(
   {

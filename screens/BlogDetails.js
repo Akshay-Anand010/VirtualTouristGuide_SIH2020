@@ -14,6 +14,8 @@ import {
 import Image from "react-native-image-progress";
 import * as Font from "expo-font";
 import ProgressBar from "react-native-progress/Bar";
+import { FAB } from "react-native-paper";
+import Icon1 from "react-native-vector-icons/FontAwesome";
 
 class Dashboard extends Component {
   speak() {
@@ -66,9 +68,9 @@ class Dashboard extends Component {
     return (
       <View
         style={{
-          height: 20,
+          height: 10,
           width: "100%",
-          backgroundColor: "grey",
+          backgroundColor: "#fff",
         }}
       />
     );
@@ -118,6 +120,12 @@ class Dashboard extends Component {
           )}
           keyExtractor={(item, index) => index}
         />
+        <FAB
+          style={styles.fab}
+          small
+          icon="chat"
+          onPress={() => this.props.navigation.navigate("chatbot")}
+        />
       </View>
     );
   }
@@ -129,7 +137,7 @@ const styles = StyleSheet.create({
   MainContainer: {
     justifyContent: "center",
     flex: 1,
-    margin: 10,
+    margin: 3,
     paddingTop: Platform.OS === "ios" ? 20 : 0,
   },
   flatview: {
@@ -143,8 +151,8 @@ const styles = StyleSheet.create({
     borderColor: "#ccccb3",
     borderWidth: 5,
     marginTop: 5,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 3,
+    marginRight: 3,
   },
   FlatListItemStyle: {
     padding: 10,
@@ -154,6 +162,9 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 300,
     height: 300,
+    alignItems: "center",
+    alignContent: "center",
+    marginLeft: 12,
   },
   card: {
     flex: 1,
@@ -176,5 +187,15 @@ const styles = StyleSheet.create({
   },
   new2: {
     marginRight: 10,
+  },
+  fab: {
+    position: "absolute",
+    margin: 20,
+    right: 0,
+    bottom: 0,
+    width: 50,
+    color: "#fff",
+    backgroundColor: "red",
+    alignContent: "center",
   },
 });

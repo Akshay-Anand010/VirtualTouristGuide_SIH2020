@@ -14,6 +14,20 @@ import * as Google from "expo-google-app-auth";
 import firebase from "firebase";
 
 class Login extends Component<{}> {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: "",
+      password: "",
+      name: "",
+      photoUrl: "",
+      loading: false,
+      disabled: false,
+      signedIn: false,
+    };
+  }
+
   isUserEqual = (googleUser, firebaseUser) => {
     if (firebaseUser) {
       var providerData = firebaseUser.providerData;
@@ -100,7 +114,14 @@ class Login extends Component<{}> {
       });
 
       if (result.type === "success") {
-        // return result.accessToken;
+        this.setState({
+          name: result.user.name,
+          photoUrl: result.user.photoUrl,
+        });
+        this.props.navigation.navigate("profile", {
+          name: this.state.data,
+          photoUrl: this.state.photoUrl,
+        });
         this.onSignIn(result);
       } else {
         return { cancelled: true };
@@ -109,17 +130,6 @@ class Login extends Component<{}> {
       return { error: true };
     }
   };
-
-  constructor() {
-    super();
-
-    this.state = {
-      email: "",
-      password: "",
-      loading: false,
-      disabled: false,
-    };
-  }
 
   saveData = () => {
     this.setState({ loading: true, disabled: true }, () => {
@@ -146,6 +156,15 @@ class Login extends Component<{}> {
           this.setState({ loading: false, disabled: false });
         });
     });
+  };
+
+  LoggedInPage = (props) => {
+    return (
+      <View style={styles.container}>
+        <Text>Welcome:{props.name}</Text>
+        <Image source={{ uri: props.photoUrl }} />
+      </View>
+    );
   };
 
   render() {
