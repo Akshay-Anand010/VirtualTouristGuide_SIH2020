@@ -32,6 +32,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
             <Icon style={[{ color: tintColor }]} size={25} name={"ios-home"} />
           </View>
         ),
+        backgroundColor: "#000",
       },
     },
     explore: {
@@ -79,9 +80,9 @@ const TabNavigator = createMaterialBottomTabNavigator(
   },
   {
     initialRouteName: "Home",
-    activeColor: "#f0edf6",
-    inactiveColor: "#226557",
-    barStyle: { backgroundColor: "#3BAD87" },
+    activeColor: "#fff",
+    inactiveColor: "#ffcc00",
+    barStyle: { backgroundColor: "#000" },
   }
 );
 

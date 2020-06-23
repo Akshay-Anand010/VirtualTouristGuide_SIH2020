@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import * as firebase from "firebase";
@@ -11,7 +11,7 @@ import TabNavigator from "./screens/Blog";
 import loading from "./screens/loading";
 import Home from "./screens/Home";
 
-firebase.initializeApp(firebaseConfig);
+// firebase.initializeApp(firebaseConfig);
 
 export default class App extends React.Component {
   render() {
@@ -24,6 +24,7 @@ const AppNavigator = createStackNavigator(
     Home: {
       screen: Login,
       navigationOptions: {
+        headerLeft: null,
         title: "Virtual Tourist Guide",
         backgroundColor: "#3385ff",
         headerTintColor: "#fff",
@@ -39,6 +40,24 @@ const AppNavigator = createStackNavigator(
     },
     Blog: {
       screen: TabNavigator,
+
+      navigationOptions: {
+        title: "Virtual Tourist Guide",
+        headerLeft: null,
+        backgroundColor: "#000",
+        headerTintColor: "#ffcc00",
+        headerStyle: {
+          backgroundColor: "#000",
+        },
+        headerRight: () => (
+          <Button
+            onPress={() => alert("This is a button!")}
+            title="Info"
+            color="#000"
+            style={styles.btn}
+          />
+        ),
+      },
     },
     loading: {
       screen: loading,
@@ -60,5 +79,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  btn: {
+    marginRight: 10,
   },
 });

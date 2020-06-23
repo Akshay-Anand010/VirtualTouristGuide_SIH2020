@@ -70,7 +70,7 @@ class Dashboard extends Component {
         style={{
           height: 10,
           width: "100%",
-          backgroundColor: "#fff",
+          backgroundColor: "#1e1e15",
         }}
       />
     );
@@ -93,7 +93,7 @@ class Dashboard extends Component {
           renderItem={({ item }) => (
             <View style={styles.flatview}>
               <Text style={styles.t1}>{item.name}</Text>
-              <Text style={styles.t2}>{item.Tag}</Text>
+              <Text style={styles.t2}>#{item.Tag}</Text>
               <Image
                 style={styles.tinyLogo}
                 indicator={ProgressBar}
@@ -101,7 +101,7 @@ class Dashboard extends Component {
                   uri: item.image,
                 }}
               />
-              <Text style={styles.small}>{item.Description}</Text>
+              <Text style={styles.sm}>{item.Description}</Text>
 
               <View style={styles.card}>
                 <Button
@@ -139,6 +139,8 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 3,
     paddingTop: Platform.OS === "ios" ? 20 : 0,
+    color: "#000",
+    backgroundColor: "#000",
   },
   flatview: {
     justifyContent: "center",
@@ -146,11 +148,11 @@ const styles = StyleSheet.create({
     borderRadius: 2,
 
     textAlign: "center",
-    backgroundColor: "#ebebe0",
+    backgroundColor: "#0f0f0a",
     borderRadius: 5,
-    borderColor: "#ccccb3",
+    borderColor: "#3d3d29",
     borderWidth: 5,
-    marginTop: 5,
+
     marginLeft: 3,
     marginRight: 3,
   },
@@ -178,8 +180,12 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     alignSelf: "center",
+    color: "#fff",
   },
-  t2: {},
+  t2: {
+    color: "red",
+    marginLeft: 20,
+  },
   new1: {
     marginLeft: 10,
     marginTop: 10,
@@ -197,5 +203,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     backgroundColor: "red",
     alignContent: "center",
+  },
+  sm: {
+    color: "#fff",
   },
 });
