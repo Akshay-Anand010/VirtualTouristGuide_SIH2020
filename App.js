@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import * as firebase from "firebase";
@@ -12,6 +19,7 @@ import TabNavigator from "./screens/Blog";
 import loading from "./screens/loading";
 import Home from "./screens/Home";
 import camera from "./screens/camera";
+import App1 from "./screens/drawer";
 
 // firebase.initializeApp(firebaseConfig);
 
@@ -39,6 +47,15 @@ const AppNavigator = createStackNavigator(
     },
     Signup: {
       screen: signup,
+    },
+    drawer: {
+      screen: App1,
+      headerMode: "none",
+      navigationOptions: {
+        header: null,
+        headerVisible: false,
+        headerLeft: null,
+      },
     },
     Blog: {
       screen: TabNavigator,

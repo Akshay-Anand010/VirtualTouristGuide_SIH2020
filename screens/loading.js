@@ -11,7 +11,7 @@ class loading extends Component {
     firebase.auth().onAuthStateChanged(
       function (user) {
         if (user) {
-          this.props.navigation.navigate("Blog");
+          this.props.navigation.navigate("drawer");
         } else {
           this.props.navigation.navigate("Home");
         }
