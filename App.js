@@ -21,7 +21,7 @@ import Home from "./screens/Home";
 import camera from "./screens/camera";
 import App1 from "./screens/drawer";
 
-firebase.initializeApp(firebaseConfig);
+// firebase.initializeApp(firebaseConfig);
 
 export default class App extends React.Component {
   render() {

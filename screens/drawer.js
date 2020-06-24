@@ -5,8 +5,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image,
   TouchableHighlight,
+  Image,
 } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createDrawerNavigator } from "react-navigation-drawer";
@@ -21,22 +21,30 @@ import Login from "./login";
 
 // firebase.initializeApp(firebaseConfig);
 
-global.s2 = "";
+export default class App1 extends React.Component {
+  componentDidMount = () => {
+    global.s2 = "";
+    var user = firebase.auth().currentUser;
+    var name, email, photoUrl, uid, emailVerified;
 
-var user = firebase.auth().currentUser;
-var name, email, photoUrl, uid, emailVerified;
+    if (user != null) {
+      var s1, s2;
+      user.providerData.forEach(function (profile) {
+        console.log("Sign-in provider: " + profile.providerId);
+        console.log("  Provider-specific UID: " + profile.uid);
+        console.log("  Name: " + profile.displayName);
+        console.log("  Email: " + profile.email);
+        console.log("  Photo URL: " + profile.photoURL);
+        s1 = profile.displayName;
+        s2 = profile.photoURL;
+      });
+      global.s2 = s2;
+    }
+  };
 
-if (user != null) {
-  var s1, s2;
-  user.providerData.forEach(function (profile) {
-    console.log("Sign-in provider: " + profile.providerId);
-    console.log("  Provider-specific UID: " + profile.uid);
-    console.log("  Name: " + profile.displayName);
-    console.log("  Email: " + profile.email);
-    console.log("  Photo URL: " + profile.photoURL);
-    // this.s1 = profile.displayName;
-    global.s2 = profile.photoURL;
-  });
+  render() {
+    return <AppContainer />;
+  }
 }
 
 const HomeScreen = () => (
@@ -156,7 +164,10 @@ const StackNavigator = createStackNavigator({
                 navigation.navigate("profile");
               }}
             >
-              <Image style={styles.image} source={{ uri: global.s2 }} />
+              <Image
+                style={styles.image}
+                source={global.s2 ? { uri: global.s2 } : null}
+              />
             </TouchableOpacity>
           ),
         };
@@ -188,7 +199,10 @@ const StackNavigator = createStackNavigator({
                 navigation.navigate("profile");
               }}
             >
-              <Image style={styles.image} source={{ uri: global.s2 }} />
+              <Image
+                style={styles.image}
+                source={global.s2 ? { uri: global.s2 } : null}
+              />
             </TouchableOpacity>
           ),
         };
@@ -214,4 +228,4 @@ const StackNavigator = createStackNavigator({
   },
 });
 
-export default App1 = createAppContainer(StackNavigator);
+const AppContainer = createAppContainer(StackNavigator);
