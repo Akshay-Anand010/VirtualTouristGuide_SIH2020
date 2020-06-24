@@ -1,13 +1,44 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  TouchableHighlight,
+} from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createDrawerNavigator } from "react-navigation-drawer";
 import { createStackNavigator } from "react-navigation-stack";
 import { DrawerActions } from "react-navigation-drawer";
 import Icon from "react-native-vector-icons/Ionicons";
 import TabNavigator from "./Blog";
-import camera from "./camera";
+import profile from "./profile";
+import * as firebase from "firebase";
+import { firebaseConfig } from "../config";
+import Login from "./login";
+
+// firebase.initializeApp(firebaseConfig);
+
+global.s2 = "";
+
+var user = firebase.auth().currentUser;
+var name, email, photoUrl, uid, emailVerified;
+
+if (user != null) {
+  var s1, s2;
+  user.providerData.forEach(function (profile) {
+    console.log("Sign-in provider: " + profile.providerId);
+    console.log("  Provider-specific UID: " + profile.uid);
+    console.log("  Name: " + profile.displayName);
+    console.log("  Email: " + profile.email);
+    console.log("  Photo URL: " + profile.photoURL);
+    // this.s1 = profile.displayName;
+    global.s2 = profile.photoURL;
+  });
+}
+
 const HomeScreen = () => (
   <View style={styles.container}>
     <Text>Home Screen!</Text>
@@ -42,6 +73,14 @@ const styles = StyleSheet.create({
     marginLeft: 14,
     marginTop: 10,
     color: "#fff",
+  },
+  image: {
+    width: 30,
+    height: 30,
+    borderColor: "rgba(0,0,0,0.2)",
+    borderWidth: 2,
+    borderRadius: 15,
+    marginRight: 10,
   },
 });
 
@@ -114,14 +153,10 @@ const StackNavigator = createStackNavigator({
           headerRight: (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("camera");
+                navigation.navigate("profile");
               }}
             >
-              <Icon
-                style={[{ color: "#fff", marginRight: 10 }]}
-                size={35}
-                name={"ios-camera"}
-              />
+              <Image style={styles.image} source={{ uri: global.s2 }} />
             </TouchableOpacity>
           ),
         };
@@ -150,22 +185,32 @@ const StackNavigator = createStackNavigator({
           headerRight: (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("camera");
+                navigation.navigate("profile");
               }}
             >
-              <Icon
-                style={[{ color: "#fff", marginRight: 10 }]}
-                size={35}
-                name={"ios-camera"}
-              />
+              <Image style={styles.image} source={{ uri: global.s2 }} />
             </TouchableOpacity>
           ),
         };
       }
     },
   },
-  camera: {
-    screen: camera,
+  profile: {
+    screen: profile,
+  },
+  Home: {
+    screen: Login,
+    navigationOptions: {
+      headerLeft: null,
+      title: "Virtual Tourist Guide",
+      backgroundColor: "#3385ff",
+      headerTintColor: "#fff",
+      headerStyle: {
+        backgroundColor: "#3385ff",
+      },
+      headerTitleAlign: "center",
+      headerTitleStyle: {},
+    },
   },
 });
 

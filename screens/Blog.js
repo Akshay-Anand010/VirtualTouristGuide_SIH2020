@@ -15,6 +15,7 @@ import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import Icon1 from "react-native-vector-icons/MaterialIcons";
+import Icon2 from "react-native-vector-icons/Ionicons";
 import Dashboard from "./BlogDetails";
 import Home from "./Home";
 import Maps from "./maps";
@@ -62,19 +63,16 @@ const TabNavigator = createMaterialBottomTabNavigator(
     Profile: {
       screen: Home,
       navigationOptions: {
-        tabBarLabel: "About Us",
+        tabBarLabel: "camera",
         tabBarIcon: ({ tintColor }) => (
           <View>
-            <Icon
+            <Icon2
               style={[{ color: tintColor }]}
-              size={25}
-              name={"ios-person"}
+              size={27}
+              name={"ios-camera"}
             />
           </View>
         ),
-        activeColor: "#f60c0d",
-        inactiveColor: "#f65a22",
-        barStyle: { backgroundColor: "#f69b31" },
       },
     },
   },

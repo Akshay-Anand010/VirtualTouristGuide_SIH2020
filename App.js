@@ -21,7 +21,7 @@ import Home from "./screens/Home";
 import camera from "./screens/camera";
 import App1 from "./screens/drawer";
 
-// firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
 export default class App extends React.Component {
   render() {
@@ -82,7 +82,7 @@ const AppNavigator = createStackNavigator(
         headerRight: (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("camera");
+              navigation.navigate("profile");
             }}
           >
             <Icon
@@ -101,7 +101,7 @@ const AppNavigator = createStackNavigator(
       screen: Home,
     },
     camera: {
-      screen: camera,
+      screen: Home,
     },
   },
   {
