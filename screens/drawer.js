@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   View,
+  SafeAreaView,
   TouchableOpacity,
   TouchableHighlight,
   Image,
@@ -43,7 +44,11 @@ export default class App1 extends React.Component {
   };
 
   render() {
-    return <AppContainer />;
+    return (
+      <SafeAreaView style={{ flex: 1, paddingBottom: 0, marginBottom: 0 }}>
+        <AppContainer />
+      </SafeAreaView>
+    );
   }
 }
 

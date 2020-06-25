@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import {
   View,
+  SafeAreaView,
   StyleSheet,
   Button,
   ScrollView,
@@ -21,6 +22,7 @@ import Home from "./Home";
 import Maps from "./maps";
 import explore from "./explore";
 import chatbot from "./explore";
+import camera from "./camera";
 
 const TabNavigator = createMaterialBottomTabNavigator(
   {
@@ -61,7 +63,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
     },
 
     Profile: {
-      screen: Home,
+      screen: camera,
       navigationOptions: {
         tabBarLabel: "camera",
         tabBarIcon: ({ tintColor }) => (
