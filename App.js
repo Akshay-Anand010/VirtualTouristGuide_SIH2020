@@ -20,7 +20,7 @@ import loading from "./screens/loading";
 import Home from "./screens/Home";
 import camera from "./screens/camera";
 import App1 from "./screens/drawer";
-
+import Details from "./screens/Details";
 // firebase.initializeApp(firebaseConfig);
 
 export default class App extends React.Component {
@@ -96,6 +96,9 @@ const AppNavigator = createStackNavigator(
     },
     loading: {
       screen: loading,
+    },
+    Details:{
+      screen:Details
     },
     profile: {
       screen: Home,

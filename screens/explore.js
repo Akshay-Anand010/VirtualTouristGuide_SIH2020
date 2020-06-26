@@ -1,68 +1,192 @@
 import React, { Component } from "react";
-import ChatBot from "react-native-chatbot-expo";
-import { Button, View, Text, StyleSheet, Image } from "react-native";
+import { Dropdown } from 'react-native-material-dropdown';
+import ProgressBar from "react-native-progress/Bar";
+import { Dimensions } from 'react-native';
+
+import { Button, View, Text, StyleSheet, Image ,Alert,FlatList} from "react-native";
 class explore extends Component {
-  render() {
-    return (
-      <View>
-        <ChatBot steps={steps} />
-      </View>
+	constructor(props) {
+	    super(props);
+	    this.state = {
+	       tag: '',
+	       isLoading:true,
+	       dataSource:[]
+	    };
+	}
+	
+	componentDidMount(){
+
+		fetch("http://docbook.orgfree.com/home.php", {
+	      method: "GET",
+	      headers: {
+	        Accept: "application/json",
+	        "Content-Type": "application/json",
+	        "auth-token": "my token",
+	      },
+	    })
+	      .then((response) => response.json())
+	      .then((responseJson) => {
+	        this.setState({
+	          isLoading: false,
+	          dataSource: responseJson, 
+
+	        });
+	        if (responseJson) {
+			  // console.log(this.state.dataSource)
+	         
+	        } else if (responseJson.error) {
+	          // Alert.alert(responseJson.error);
+	        }
+	      })
+
+	      .catch((error) => {
+	        console.error(error);
+	      });
+
+	    
+	}
+	renderCategories() { return this.state.dataSource.map((item, index) => <Text key={index}>{item.Tag}</Text>); }
+
+
+  	render() {
+  		const {navigate} =this.props.navigation;
+  		const { dataSource, tag } = this.state;
+
+		const tagFilter = item => {
+			  if (tag) {
+			    return item.Tag === tag;
+			  }
+			  return true;
+		}
+	  	let data = [{
+	      value: 'Church',
+	    }, {
+	      value: 'Beach',
+	    }, {
+	      value: 'Temple',
+		},{
+		  value:'Waterfall'	
+		},
+		{
+		  value:'Town'
+		},
+		{
+		  value:'Wildlife Sanctuary'
+		},
+		,
+		{
+		  value:'Mosque'
+		},
+		{
+		  value:'Heritage House'
+		},
+		,
+		{
+		  value:'Fort'
+		},
+		,
+		{
+		  value:'Club'
+		},
+		{
+		  value:'Lake'
+		},
+		{
+		  value:'Island'
+		},
+
+		];
+    	
+    return (	
+		  <View style={styles.MainContainer}>
+		  	
+		  	
+      	  	<Dropdown
+	        	label='TAG'
+	        	data={data}
+	        	onChangeText={tag => this.setState({ tag })}
+      	  	/>
+
+      	  	
+
+
+      	  	
+      	  	<FlatList
+	          data={dataSource.filter(tagFilter)}
+	          ItemSeparatorComponent={this.FlatListItemSeparator}
+	          renderItem={({ item }) => (
+	            <View style={styles.flatview}>
+	              <Text style={styles.t1}>{item.name}</Text>
+	              <Text style={styles.t2}>#{item.Tag}</Text>
+	              <Image
+	                style={styles.tinyLogo}
+	                indicator={ProgressBar}
+	                source={{
+	                  uri: item.image,
+	                }}
+	              />
+	              <Button
+	              	title='View details'
+	              	onPress={()=>navigate('Details')}
+	              />
+	            </View>
+	          )}
+        	/>
+
+
+
+
+
+
+		  </View>
+
     );
   }
 }
-const steps = [
-  {
-    id: "0",
-    message: "Welcome to Virtual Tourist Guide!",
-    trigger: "1",
-  },
-  {
-    id: "1",
-    message: "How may I help you!",
-    trigger: "2",
-  },
-  {
-    id: "2",
-    options: [
-      { value: "hotel", label: "Hotel Booking!", trigger: "3" },
-      { value: "place", label: "Near By Places!", trigger: "4" },
-      { value: "others", label: "others  ", trigger: "5" },
-    ],
-  },
-  {
-    id: "3",
-    component: (
-      <Image
-        style={{ width: 300, height: 300 }}
-        source={{
-          uri: "https://picsum.photos/300/300",
-        }}
-      />
-    ),
-    trigger: "6",
-  },
-  {
-    id: "4",
-    message: "let me check nearby places for you!",
-    end: true,
-  },
-  {
-    id: "5",
-    message: "please call on our customer care number!",
-    end: true,
-  },
-  {
-    id: "6",
-    user: true,
-    trigger: "2",
-  },
-];
 const styles = StyleSheet.create({
-  container: {
+  MainContainer: {
+    justifyContent: "center",
     flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
+    margin: 3,
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
+    color: "#000",
+    backgroundColor: "#fff",
   },
+  flatview: {
+    justifyContent: "center",
+    paddingTop: 5,
+    borderRadius: 2,
+
+    textAlign: "center",
+    backgroundColor: "#333",
+    borderRadius: 5,
+    borderColor: "#333",
+    borderWidth: 5,
+
+    margin:3,
+  },
+  tinyLogo: {
+   	width: 300,
+    height: 300,
+    alignItems: "center",
+    alignContent: "center",
+    marginLeft: 12,
+    marginBottom:10
+  },
+  t1: {
+    fontSize: 20,
+    alignContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    color: "#f7c00c",
+  },
+  t2: {
+    color: "red",
+    marginLeft: 20,
+  },
+  
 });
 
 export default explore;
+
+

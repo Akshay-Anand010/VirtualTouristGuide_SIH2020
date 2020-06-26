@@ -48,7 +48,7 @@ class Dashboard extends Component {
           dataSource: responseJson, //===>i think this is were problem
         });
         if (responseJson) {
-          Alert.alert("Id is" + JSON.stringify(responseJson)); //==>this give me an alert
+          // Alert.alert("Id is" + JSON.stringify(responseJson)); //==>this give me an alert
           // console.log(responseJson);
         } else if (responseJson.error) {
           Alert.alert(responseJson.error);
