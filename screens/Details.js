@@ -9,16 +9,58 @@ class Details extends Component {
 	constructor(props){
     super(props);
     this.state={
-      data:''
+      data:'',
+      dataSource:[]
     }
   }
 	
+  renderCategories() {
+    return this.state.dataSource.map((item, index) => <Text key={index} style={styles.nearby}>{index}:{item}</Text>);
+  }
 
   componentDidMount(){
     const data =this.props.navigation.getParam('data',{})
     this.setState({
       data
     });
+    var lat=''
+    var lon=''
+
+    lat =data.latitude
+    lon =data.longitude
+
+    var url=`https://datapredictor.herokuapp.com/latlong?lati=15.5494&longi=73.7535`
+    fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json", 
+          "auth-token": "my token",
+        },
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            isLoading: false,
+            dataSource: responseJson, 
+
+          });
+          if (responseJson) {
+        console.log(this.state.dataSource)
+           
+          } else if (responseJson.error) {
+            // Alert.alert(responseJson.error);
+          }
+        })
+
+        .catch((error) => {
+          console.error(error);
+        });
+
+
+
+
+
   }
 
 
@@ -46,10 +88,13 @@ class Details extends Component {
           {this.state.data.Description}
         </Text> 
 
+        <View style={styles.temp}></View>
 
+        <Text style={styles.heading}>Nearby places</Text>
 
-
-
+        <View style={styles.container}>
+            {this.renderCategories()}
+        </View>
 
 		  </View>
     </ScrollView>
@@ -114,10 +159,21 @@ const styles=StyleSheet.create({
   },
   scrollView: {
     backgroundColor: 'pink',
+    padding:0
   },
   Description:{
     color:'#2ade66',
     lineHeight:20,
+    margin:10,
+    textAlign:'center',
+
+  },
+  temp:{
+    height:30,
+    width:'100%'
+  },
+  nearby:{
+    color:'#2ade66',
     margin:5,
     textAlign:'center'
   }
