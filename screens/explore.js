@@ -1,145 +1,133 @@
 import React, { Component } from "react";
-import { Dropdown } from 'react-native-material-dropdown';
+import { Dropdown } from "react-native-material-dropdown";
 import ProgressBar from "react-native-progress/Bar";
-import { Dimensions } from 'react-native';
-
-import { Button, View, Text, StyleSheet, Image ,Alert,FlatList} from "react-native";
+import { Dimensions } from "react-native";
+import Image from "react-native-image-progress";
+import { Button, View, Text, StyleSheet, Alert, FlatList } from "react-native";
 class explore extends Component {
-	constructor(props) {
-	    super(props);
-	    this.state = {
-	       tag: '',
-	       isLoading:true,
-	       dataSource:[]
-	    };
-	}
-	
-	componentDidMount(){
+  constructor(props) {
+    super(props);
+    this.state = {
+      tag: "",
+      isLoading: true,
+      dataSource: [],
+    };
+  }
 
-		fetch("http://docbook.orgfree.com/home.php", {
-	      method: "GET",
-	      headers: {
-	        Accept: "application/json",
-	        "Content-Type": "application/json",
-	        "auth-token": "my token",
-	      },
-	    })
-	      .then((response) => response.json())
-	      .then((responseJson) => {
-	        this.setState({
-	          isLoading: false,
-	          dataSource: responseJson, 
+  componentDidMount() {
+    fetch("http://docbook.orgfree.com/home.php", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "auth-token": "my token",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson,
+        });
+        if (responseJson) {
+          // console.log(this.state.dataSource)
+        } else if (responseJson.error) {
+          // Alert.alert(responseJson.error);
+        }
+      })
 
-	        });
-	        if (responseJson) {
-			  // console.log(this.state.dataSource)
-	         
-	        } else if (responseJson.error) {
-	          // Alert.alert(responseJson.error);
-	        }
-	      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+  renderCategories() {
+    return this.state.dataSource.map((item, index) => (
+      <Text key={index}>{item.Tag}</Text>
+    ));
+  }
 
-	      .catch((error) => {
-	        console.error(error);
-	      });
+  render() {
+    const { navigate } = this.props.navigation;
+    const { dataSource, tag } = this.state;
 
-	    
-	}
-	renderCategories() { return this.state.dataSource.map((item, index) => <Text key={index}>{item.Tag}</Text>); }
+    const tagFilter = (item) => {
+      if (tag) {
+        return item.Tag === tag;
+      }
+      return true;
+    };
+    let data = [
+      {
+        value: "Church",
+      },
+      {
+        value: "Beach",
+      },
+      {
+        value: "Temple",
+      },
+      {
+        value: "Waterfall",
+      },
+      {
+        value: "Town",
+      },
+      {
+        value: "Wildlife Sanctuary",
+      },
+      ,
+      {
+        value: "Mosque",
+      },
+      {
+        value: "Heritage House",
+      },
+      ,
+      {
+        value: "Fort",
+      },
+      ,
+      {
+        value: "Club",
+      },
+      {
+        value: "Lake",
+      },
+      {
+        value: "Island",
+      },
+    ];
 
+    return (
+      <View style={styles.MainContainer}>
+        <Dropdown
+          label="TAG"
+          data={data}
+          onChangeText={(tag) => this.setState({ tag })}
+        />
 
-  	render() {
-  		const {navigate} =this.props.navigation;
-  		const { dataSource, tag } = this.state;
-
-		const tagFilter = item => {
-			  if (tag) {
-			    return item.Tag === tag;
-			  }
-			  return true;
-		}
-	  	let data = [{
-	      value: 'Church',
-	    }, {
-	      value: 'Beach',
-	    }, {
-	      value: 'Temple',
-		},{
-		  value:'Waterfall'	
-		},
-		{
-		  value:'Town'
-		},
-		{
-		  value:'Wildlife Sanctuary'
-		},
-		,
-		{
-		  value:'Mosque'
-		},
-		{
-		  value:'Heritage House'
-		},
-		,
-		{
-		  value:'Fort'
-		},
-		,
-		{
-		  value:'Club'
-		},
-		{
-		  value:'Lake'
-		},
-		{
-		  value:'Island'
-		},
-
-		];
-    	
-    return (	
-		  <View style={styles.MainContainer}>
-		  	
-		  	
-      	  	<Dropdown
-	        	label='TAG'
-	        	data={data}
-	        	onChangeText={tag => this.setState({ tag })}
-      	  	/>
-
-      	  	
-
-
-      	  	
-      	  	<FlatList
-	          data={dataSource.filter(tagFilter)}
-	          ItemSeparatorComponent={this.FlatListItemSeparator}
-	          renderItem={({ item }) => (
-	            <View style={styles.flatview}>
-	              <Text style={styles.t1}>{item.name}</Text>
-	              <Text style={styles.t2}>#{item.Tag}</Text>
-	              <Image
-	                style={styles.tinyLogo}
-	                indicator={ProgressBar}
-	                source={{
-	                  uri: item.image,
-	                }}
-	              />
-	              <Button
-	              	title='View details'
-	              	onPress={()=>navigate('Details')}
-	              />
-	            </View>
-	          )}
-        	/>
-
-
-
-
-
-
-		  </View>
-
+        <FlatList
+          data={dataSource.filter(tagFilter)}
+          ItemSeparatorComponent={this.FlatListItemSeparator}
+          renderItem={({ item }) => (
+            <View style={styles.flatview}>
+              <Text style={styles.t1}>{item.name}</Text>
+              <Text style={styles.t2}>#{item.Tag}</Text>
+              <Image
+                style={styles.tinyLogo}
+                indicator={ProgressBar}
+                source={{
+                  uri: item.image,
+                }}
+              />
+              <Button
+                title="View details"
+                onPress={() => navigate("Details")}
+              />
+            </View>
+          )}
+        />
+      </View>
     );
   }
 }
@@ -163,15 +151,15 @@ const styles = StyleSheet.create({
     borderColor: "#333",
     borderWidth: 5,
 
-    margin:3,
+    margin: 3,
   },
   tinyLogo: {
-   	width: 300,
+    width: 300,
     height: 300,
     alignItems: "center",
     alignContent: "center",
     marginLeft: 12,
-    marginBottom:10
+    marginBottom: 10,
   },
   t1: {
     fontSize: 20,
@@ -184,9 +172,6 @@ const styles = StyleSheet.create({
     color: "red",
     marginLeft: 20,
   },
-  
 });
 
 export default explore;
-
-

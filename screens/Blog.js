@@ -62,7 +62,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
       },
     },
 
-    Profile: {
+    camera: {
       screen: camera,
       navigationOptions: {
         tabBarLabel: "camera",

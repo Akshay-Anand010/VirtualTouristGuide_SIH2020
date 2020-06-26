@@ -14,11 +14,14 @@ import { createDrawerNavigator } from "react-navigation-drawer";
 import { createStackNavigator } from "react-navigation-stack";
 import { DrawerActions } from "react-navigation-drawer";
 import Icon from "react-native-vector-icons/Ionicons";
+import Icon1 from "react-native-vector-icons/AntDesign";
 import TabNavigator from "./Blog";
 import profile from "./profile";
 import * as firebase from "firebase";
 import { firebaseConfig } from "../config";
 import Login from "./login";
+import chatbot from "./chatbot";
+import Home from "./Home";
 
 // firebase.initializeApp(firebaseConfig);
 
@@ -51,24 +54,6 @@ export default class App1 extends React.Component {
     );
   }
 }
-
-const HomeScreen = () => (
-  <View style={styles.container}>
-    <Text>Home Screen!</Text>
-  </View>
-);
-
-const ProfileScreen = () => (
-  <View style={styles.container}>
-    <Text>Profile Screen!</Text>
-  </View>
-);
-
-const SettingsScreen = () => (
-  <View style={styles.container}>
-    <Text>Settings Screen!</Text>
-  </View>
-);
 
 const styles = StyleSheet.create({
   container: {
@@ -106,7 +91,7 @@ const DrawerNavigator = createDrawerNavigator({
       headerRight: (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("camera");
+            navigation.navigate("profile");
           }}
         >
           <Icon
@@ -119,7 +104,7 @@ const DrawerNavigator = createDrawerNavigator({
     }),
   },
   Profile: {
-    screen: ProfileScreen,
+    screen: profile,
     navigationOptions: ({ navigation }) => ({
       title: "Profile Screen",
       drawerLabel: "Profile",
@@ -127,9 +112,17 @@ const DrawerNavigator = createDrawerNavigator({
     }),
   },
   Settings: {
-    screen: SettingsScreen,
+    screen: chatbot,
     navigationOptions: ({ navigation }) => ({
-      drawerIcon: () => <Ionicons name="ios-settings" size={20} />,
+      drawerLabel: "Assistant",
+      drawerIcon: () => <Ionicons name="ios-chatbubbles" size={20} />,
+    }),
+  },
+  share: {
+    screen: chatbot,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: "share App",
+      drawerIcon: () => <Icon1 name="sharealt" size={20} />,
     }),
   },
 });
@@ -216,20 +209,6 @@ const StackNavigator = createStackNavigator({
   },
   profile: {
     screen: profile,
-  },
-  Home: {
-    screen: Login,
-    navigationOptions: {
-      headerLeft: null,
-      title: "Virtual Tourist Guide",
-      backgroundColor: "#3385ff",
-      headerTintColor: "#fff",
-      headerStyle: {
-        backgroundColor: "#3385ff",
-      },
-      headerTitleAlign: "center",
-      headerTitleStyle: {},
-    },
   },
 });
 

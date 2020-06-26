@@ -14,7 +14,7 @@ import {
 import Image from "react-native-image-progress";
 import * as Font from "expo-font";
 import ProgressBar from "react-native-progress/Bar";
-import { FAB } from "react-native-paper";
+
 import Icon1 from "react-native-vector-icons/FontAwesome";
 
 class Dashboard extends Component {
@@ -119,12 +119,6 @@ class Dashboard extends Component {
             </View>
           )}
           keyExtractor={(item, index) => index}
-        />
-        <FAB
-          style={styles.fab}
-          small
-          icon="chat"
-          onPress={() => this.props.navigation.navigate("chatbot")}
         />
       </View>
     );
