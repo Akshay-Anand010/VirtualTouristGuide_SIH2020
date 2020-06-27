@@ -22,6 +22,7 @@ import { firebaseConfig } from "../config";
 import Login from "./login";
 import chatbot from "./chatbot";
 import Home from "./Home";
+import Details from "./Details";
 
 // firebase.initializeApp(firebaseConfig);
 
@@ -209,6 +210,9 @@ const StackNavigator = createStackNavigator({
   },
   profile: {
     screen: profile,
+  },
+  Details: {
+    screen: Details,
   },
 });
 
