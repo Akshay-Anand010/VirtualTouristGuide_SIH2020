@@ -170,25 +170,25 @@ class Details extends Component {
 }
 
 const styles = StyleSheet.create({
-  Main: {
+  Main:{
     width: Dimensions.get("window").width,
     backgroundColor: "#333",
   },
-  b1: {
-    color: "#fff",
-    width: 100,
+  b1:{
+    color:"#fff",
+    width:100,
   },
-  b2: {
-    width: 200,
-    marginHorizontal: 85,
+  b2:{
+    width:200,
+    marginHorizontal:85,
   },
-  con: {
-    color: "#ffc400",
-    marginHorizontal: 15,
-    marginTop: 3,
-    fontWeight: "bold",
+  con:{
+    color:"#ffc400",
+    marginHorizontal:15,
+    marginTop:3,
+    fontWeight:"bold",
   },
-  image: {
+  image:{
     height: 50,
     width: 50,
     marginRight: 10,
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     lineHeight: 50,
     flexDirection: "row",
   },
-  location: {
+  location:{
     color: "#ffc400",
     fontSize: 20,
     fontStyle: "normal",
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     lineHeight: 50,
     justifyContent: "flex-start",
   },
-  noc: {
+  noc:{
     color: "red",
     fontSize: 20,
     fontStyle: "normal",
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 5,
     borderRadius: 2,
-    borderColor: "#ffc400",
+    borderColor: "#333",
     borderWidth: 3,
   },
   te: {
