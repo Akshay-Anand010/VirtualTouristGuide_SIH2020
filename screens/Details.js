@@ -23,37 +23,43 @@ class Details extends Component {
       name: "",
       photoUrl: "",
       dataSource: [],
+      dataSource1: [],
+      loading: false,
+      disabled: false,
     };
   }
 
-  saveData = () => {
-    this.setState({ loading: true, disabled: true }, () => {
-      fetch("http://docbook.orgfree.com/submit.php", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: this.state.name,
+  saveData = (mid1) => {
+    global.mid1 = mid1;
+    console.log(global.comment);
+    var p = global.comment;
+    fetch("http://docbook.orgfree.com/comment.php", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: this.state.name,
 
-          email: this.state.email,
+        email: this.state.email,
 
-          comments: this.state.comments,
+        comments: p,
 
-          photourl: this.state.password,
-        }),
+        photourl: this.state.photoUrl,
+
+        mid: global.mid1,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        alert(responseJson);
+        this.setState({ loading: false, disabled: false });
       })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          alert(responseJson);
-          this.setState({ loading: false, disabled: false });
-        })
-        .catch((error) => {
-          console.error(error);
-          this.setState({ loading: false, disabled: false });
-        });
-    });
+      .catch((error) => {
+        console.error(error);
+        this.setState({ loading: false, disabled: false });
+      });
   };
 
   renderCategories() {
@@ -65,10 +71,16 @@ class Details extends Component {
   }
 
   componentDidMount() {
+    global.comment = "";
+    global.mid1 = "";
+    global.m = "";
     const data = this.props.navigation.getParam("data", {});
     this.setState({
       data,
     });
+
+    global.m = this.state.data.Mid;
+
     var lat = "";
     var lon = "";
 
@@ -101,11 +113,41 @@ class Details extends Component {
         console.error(error);
       });
 
+    setTimeout(() => {
+      fetch("http://docbook.orgfree.com/comm.php", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mid: this.state.data.Mid,
+        }),
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            isLoading: false,
+            dataSource1: responseJson,
+          });
+          if (responseJson) {
+            console.log(this.state.dataSource1);
+            console.log(this.state.data.Mid);
+          } else if (responseJson.error) {
+            // Alert.alert(responseJson.error);
+          }
+        })
+
+        .catch((error) => {
+          console.error(error);
+        });
+    }, 1000);
+
     var user = firebase.auth().currentUser;
     var name, email, photoUrl, uid, emailVerified;
 
     if (user != null) {
-      var s1, s2;
+      var s1, s2, s3;
       user.providerData.forEach(function (profile) {
         console.log("Sign-in provider: " + profile.providerId);
         console.log("  Provider-specific UID: " + profile.uid);
@@ -114,14 +156,29 @@ class Details extends Component {
         console.log("  Photo URL: " + profile.photoURL);
         s1 = profile.displayName;
         s2 = profile.photoURL;
+        s3 = profile.email;
       });
       this.setState({
-        email: s1,
+        name: s1,
+        email: s3,
         photoUrl: s2,
       });
     }
   }
-
+  FlatListItemSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          width: "100%",
+          margin: 5,
+          marginTop: 10,
+          marginBottom: 10,
+          backgroundColor: "#fff",
+        }}
+      />
+    );
+  };
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -157,12 +214,38 @@ class Details extends Component {
               underlineColorAndroid="transparent"
               placeholder="Share your experience"
               style={styles.textInput}
-              onChangeText={(text) => this.setState({ comments: text })}
+              onChangeText={(text) => (global.comment = text)}
             />
           </View>
           <View style={styles.b2}>
-            <Button style={styles.b1} title="Comment" />
+            <Button
+              style={styles.b1}
+              title="Comment"
+              onPress={() => this.saveData(this.state.data.Mid)}
+            />
           </View>
+          <Text style={styles.con1}>Comments from your fellow Tourists..</Text>
+          <FlatList
+            data={this.state.dataSource1}
+            ItemSeparatorComponent={this.FlatListItemSeparator}
+            renderItem={({ item }) => (
+              <View style={styles.flatview}>
+                <View style={styles.hr}>
+                  <Image
+                    style={styles.image1}
+                    source={{
+                      uri: item.photourl,
+                    }}
+                  />
+                  <Text style={styles.sm}>{item.name}</Text>
+                </View>
+                <View style={styles.vr}>
+                  <Text style={styles.tr}>{item.comments}</Text>
+                </View>
+              </View>
+            )}
+            keyExtractor={(item, index) => index}
+          />
         </ScrollView>
       </SafeAreaView>
     );
@@ -170,25 +253,59 @@ class Details extends Component {
 }
 
 const styles = StyleSheet.create({
-  Main:{
+  Main: {
     width: Dimensions.get("window").width,
     backgroundColor: "#333",
   },
-  b1:{
-    color:"#fff",
-    width:100,
+  b1: {
+    color: "#fff",
+    width: 100,
   },
-  b2:{
-    width:200,
-    marginHorizontal:85,
+  tr: {
+    color: "#fff",
+    fontSize: 15,
+    marginLeft: 45,
   },
-  con:{
-    color:"#ffc400",
-    marginHorizontal:15,
-    marginTop:3,
-    fontWeight:"bold",
+  image1: {
+    width: 30,
+    height: 30,
+    borderColor: "rgba(0,0,0,0.2)",
+    borderWidth: 2,
+    borderRadius: 15,
+    marginRight: 10,
   },
-  image:{
+  sm: {
+    fontSize: 20,
+    color: "#FEE715FF",
+    fontWeight: "bold",
+  },
+  hr: {
+    flexDirection: "row",
+    marginHorizontal: 20,
+  },
+  vr: {
+    flexDirection: "column",
+    marginHorizontal: 20,
+    alignItems: "flex-start",
+  },
+  b2: {
+    width: 200,
+    marginHorizontal: 85,
+  },
+  con: {
+    color: "#ffc400",
+    marginHorizontal: 15,
+    marginTop: 3,
+    fontWeight: "bold",
+  },
+  con1: {
+    color: "#ffc400",
+    marginHorizontal: 15,
+    marginTop: 3,
+    fontWeight: "bold",
+    marginTop: 3,
+  },
+  image: {
     height: 50,
     width: 50,
     marginRight: 10,
@@ -226,7 +343,7 @@ const styles = StyleSheet.create({
     lineHeight: 50,
     flexDirection: "row",
   },
-  location:{
+  location: {
     color: "#ffc400",
     fontSize: 20,
     fontStyle: "normal",
@@ -240,7 +357,7 @@ const styles = StyleSheet.create({
     lineHeight: 50,
     justifyContent: "flex-start",
   },
-  noc:{
+  noc: {
     color: "red",
     fontSize: 20,
     fontStyle: "normal",
@@ -266,7 +383,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 5,
     borderRadius: 2,
-    borderColor: "#333",
+    borderColor: "#ffc400",
     borderWidth: 3,
   },
   te: {
