@@ -36,6 +36,7 @@
     "react-native-dropdown-menu": "^2.0.0",
     "react-native-geolocation-service": "^5.0.0",
     "react-native-gesture-handler": "~1.6.0",
+    "react-native-google-maps-directions": "^2.1.1",
     "react-native-image-progress": "^1.1.1",
     "react-native-loading-spinner-overlay": "^1.1.0",
     "react-native-maps": "0.26.1",

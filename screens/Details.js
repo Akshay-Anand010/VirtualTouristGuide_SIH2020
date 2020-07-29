@@ -13,6 +13,8 @@ import {
   FlatList,
   TextInput,
 } from "react-native";
+import getDirections from "react-native-google-maps-directions";
+
 class Details extends Component {
   constructor(props) {
     super(props);
@@ -55,7 +57,40 @@ class Details extends Component {
         });
     });
   };
+  findCurrentLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const latitude = JSON.stringify(position.coords.latitude);
+        const longitude = JSON.stringify(position.coords.longitude);
+        console.log(latitude + " " + longitude);
+        lat = latitude;
+        lon = longitude;
+        let region = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.22,
+          longitudeDelta: 0.0421,
+        };
+        this.setState({
+          initialPosition: region,
+        });
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+  };
 
+  findCurrentLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+
+    if (status !== "granted") {
+      this.setState({
+        errorMessage: "Permission to access location was denied",
+      });
+    }
+    console.log("Android granted!");
+    let location = await Location.getCurrentPositionAsync({});
+    this.setState({ location });
+  };
   renderCategories() {
     return this.state.dataSource.map((item, index) => (
       <Text key={index} style={styles.nearby}>
@@ -63,8 +98,34 @@ class Details extends Component {
       </Text>
     ));
   }
+  handleGetDirections = () => {
+    const data = {
+      source: {
+        latitude: this.state.initialPosition.latitude,
+        longitude: this.state.initialPosition.longitude,
+      },
+      destination: {
+        latitude: parseFloat(this.state.data.latitude),
+        longitude: parseFloat(this.state.data.longitude),
+      },
+      params: [
+        {
+          key: "travelmode",
+          value: "driving", // may be "walking", "bicycling" or "transit" as well
+        },
+        {
+          key: "dir_action",
+          value: "navigate", // this instantly initializes navigation using the given travel mode
+        },
+      ],
+    };
+
+    getDirections(data);
+  };
 
   componentDidMount() {
+    this.findCurrentLocationAsync();
+    this.findCurrentLocation();
     const data = this.props.navigation.getParam("data", {});
     this.setState({
       data,
@@ -129,6 +190,8 @@ class Details extends Component {
         <ScrollView style={styles.scrollView}>
           <View style={styles.Main}>
             <Text style={styles.heading}>{this.state.data.name}</Text>
+            <Button onPress={this.handleGetDirections} title="Get Directions" />
+
             <Image
               style={styles.imageStyle}
               source={{
