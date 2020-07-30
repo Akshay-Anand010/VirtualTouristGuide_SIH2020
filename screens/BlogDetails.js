@@ -14,7 +14,7 @@ import {
 import Image from "react-native-image-progress";
 import * as Font from "expo-font";
 import ProgressBar from "react-native-progress/Bar";
-
+import firebase from "firebase";
 import Icon1 from "react-native-vector-icons/FontAwesome";
 
 class Dashboard extends Component {
@@ -23,6 +23,25 @@ class Dashboard extends Component {
     Speech.speak(thingToSay);
   }
 
+  getUser = () => {
+    var user = firebase.auth().currentUser;
+    var name, email, photoUrl, uid, emailVerified;
+
+    if (user != null) {
+      var s1, s2;
+      user.providerData.forEach(function (profile) {
+        console.log("  Email: " + profile.email);
+        s1 = profile.displayName;
+        s2 = profile.email;
+
+        //User Email is in S2 Now Calling Axios to get the user Preferences
+      });
+      this.setState({
+        name: s1,
+        email: s2,
+      });
+    }
+  };
   constructor(props) {
     super(props);
 
@@ -32,6 +51,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
+    this.getUser();
     fetch("http://docbook.orgfree.com/home.php", {
       method: "GET",
       headers: {
@@ -62,6 +82,7 @@ class Dashboard extends Component {
     Font.loadAsync({
       "Pacifico-Regular": require("../fonts/Pacifico-Regular.ttf"),
     });
+    console.log("this" + this.state);
   }
 
   FlatListItemSeparator = () => {
