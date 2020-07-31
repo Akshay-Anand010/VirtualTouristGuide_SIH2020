@@ -83,6 +83,7 @@ class signup extends Component<{}> {
           placeholder="Password"
           style={styles.textInput}
           onChangeText={(text) => this.setState({ password: text })}
+          secureTextEntry={true}
         />
 
         <TouchableOpacity
