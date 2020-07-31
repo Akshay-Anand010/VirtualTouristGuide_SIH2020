@@ -74,12 +74,12 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   image: {
-    width: 30,
-    height: 30,
-    borderColor: "rgba(0,0,0,0.2)",
-    borderWidth: 2,
-    borderRadius: 15,
-    marginRight: 10,
+    width: 35,
+    height: 35,
+    borderColor: "#ff1a1a",
+    borderWidth: 1,
+    borderRadius: 20,
+    marginRight: 15,
   },
 });
 
@@ -138,10 +138,10 @@ const StackNavigator = createStackNavigator({
       if (state.isDrawerOpen) {
         return {
           title: "Virtual Tourist Guide",
-          backgroundColor: "#000",
-          headerTintColor: "#ffcc00",
+          backgroundColor: "#fff",
+          headerTintColor: "#fff",
           headerStyle: {
-            backgroundColor: "#000",
+            backgroundColor: "#00b300",
           },
           headerLeft: ({ titleStyle }) => (
             <TouchableOpacity
@@ -173,10 +173,10 @@ const StackNavigator = createStackNavigator({
       } else {
         return {
           title: "Virtual Tourist Guide",
-          backgroundColor: "#000",
-          headerTintColor: "#ffcc00",
+          backgroundColor: "#fff",
+          headerTintColor: "#fff",
           headerStyle: {
-            backgroundColor: "#000",
+            backgroundColor: "#00b300",
           },
           headerLeft: ({ titleStyle }) => (
             <TouchableOpacity

@@ -10,6 +10,8 @@ import {
   ActivityIndicator,
   Platform,
   Button,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import Image from "react-native-image-progress";
 import * as Font from "expo-font";
@@ -18,6 +20,15 @@ import firebase from "firebase";
 import Icon1 from "react-native-vector-icons/FontAwesome";
 
 class Dashboard extends Component {
+  state = {
+    isVisible: false,
+  };
+
+  // hide show modal
+  displayModal(show) {
+    this.setState({ isVisible: show });
+  }
+
   speak() {
     var thingToSay = "0";
     Speech.speak(thingToSay);
@@ -46,8 +57,76 @@ class Dashboard extends Component {
     super(props);
 
     this.state = {
+      tag: "",
       isLoading: true,
+      dataSource: [],
+      email: "",
     };
+  }
+
+  actionOnRow(item) {
+    var date = new Date().getDate().toString();
+    var month = new Date().getMonth() + 1;
+    month.toString();
+    var year = new Date().getFullYear().toString();
+    const date_to_update = year.concat("-", month, "-", date);
+    console.log(date_to_update);
+    this.props.navigation.navigate("Details", { data: item });
+
+    //Storing User Clicks Email Wise
+    this.setState({ loading: true, disabled: true }, () => {
+      fetch("http://docbook.orgfree.com/touch1.php", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: this.state.email,
+
+          tag: item.Tag,
+        }),
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          // alert(responseJson);
+          this.setState({ loading: false, disabled: false });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.setState({ loading: false, disabled: false });
+        });
+    });
+
+    // End of Storing User Clicks
+
+    //Updating Monument Count
+
+    this.setState({ loading: true, disabled: true }, () => {
+      fetch("http://docbook.orgfree.com/touch2.php", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mid: item.Mid,
+
+          date_touched: date_to_update,
+        }),
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          //   alert(responseJson);
+          this.setState({ loading: false, disabled: false });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.setState({ loading: false, disabled: false });
+        });
+    });
+
+    //End of updating moument
   }
 
   componentDidMount() {
@@ -91,7 +170,7 @@ class Dashboard extends Component {
         style={{
           height: 10,
           width: "100%",
-          backgroundColor: "#1e1e15",
+          backgroundColor: "#fff",
         }}
       />
     );
@@ -112,30 +191,41 @@ class Dashboard extends Component {
           data={this.state.dataSource}
           ItemSeparatorComponent={this.FlatListItemSeparator}
           renderItem={({ item }) => (
-            <View style={styles.flatview}>
-              <Text style={styles.t1}>{item.name}</Text>
-              <Text style={styles.t2}>#{item.Tag}</Text>
-              <Image
-                style={styles.tinyLogo}
-                indicator={ProgressBar}
-                source={{
-                  uri: item.image,
-                }}
-              />
-              <Text style={styles.sm}>{item.Description}</Text>
-
-              <View style={styles.card}>
-                <Button
-                  title="Speak!"
-                  onPress={() => Speech.speak(item.Description)}
-                  style={styles.new1}
+            <View style={styles.flatview} elevation={5}>
+              <View style={styles.no1}>
+                <Image
+                  style={styles.tinyLogo}
+                  indicator={ProgressBar}
+                  source={{
+                    uri: item.image,
+                  }}
                 />
+              </View>
 
-                <Button
-                  title="Stop"
-                  onPress={() => Speech.stop()}
-                  style={styles.new2}
-                />
+              <View style={styles.no2}>
+                <Text style={styles.t1}>{item.name}</Text>
+                <Text style={styles.t2}>#{item.Tag}</Text>
+
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.actionOnRow(item)}
+                >
+                  <Text style={styles.buttonText}>Show Details</Text>
+                </TouchableOpacity>
+
+                <View style={styles.card}>
+                  <Button
+                    title="Speak!"
+                    onPress={() => Speech.speak(item.Description)}
+                    style={styles.new1}
+                  />
+
+                  <Button
+                    title="Stop"
+                    onPress={() => Speech.stop()}
+                    style={styles.new2}
+                  />
+                </View>
               </View>
             </View>
           )}
@@ -154,20 +244,23 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 3,
     paddingTop: Platform.OS === "ios" ? 20 : 0,
-    color: "#000",
-    backgroundColor: "#000",
+    color: "#fff",
+    backgroundColor: "#fff",
   },
   flatview: {
-    justifyContent: "center",
     paddingTop: 5,
     borderRadius: 2,
-
-    textAlign: "center",
-    backgroundColor: "#0f0f0a",
+    backgroundColor: "#fff",
     borderRadius: 5,
-    borderColor: "#3d3d29",
-    borderWidth: 5,
-
+    flexDirection: "row",
+    padding: 5,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1.0,
     marginLeft: 3,
     marginRight: 3,
   },
@@ -177,25 +270,35 @@ const styles = StyleSheet.create({
     height: 44,
   },
   tinyLogo: {
-    width: 300,
+    width: 100,
+    height: 200,
+    alignItems: "center",
+    alignContent: "center",
+    marginRight: 5,
+  },
+  tinyLogo1: {
+    width: 400,
     height: 300,
     alignItems: "center",
     alignContent: "center",
-    marginLeft: 12,
+    marginLeft: 5,
+    marginRight: 5,
   },
   card: {
     flex: 1,
     marginTop: 10,
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
+    marginRight: 5,
   },
   t1: {
     fontFamily: "Pacifico-Regular",
-    fontSize: 30,
+    fontSize: 20,
     alignContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    color: "#fff",
+    marginRight: 55,
+    color: "#000",
   },
   t2: {
     color: "red",
@@ -204,10 +307,13 @@ const styles = StyleSheet.create({
   new1: {
     marginLeft: 10,
     marginTop: 10,
+    marginBottom: 5,
     alignItems: "center",
+    width: 30,
   },
   new2: {
-    marginRight: 10,
+    marginRight: 2,
+    marginTop: 10,
   },
   fab: {
     position: "absolute",
@@ -220,6 +326,76 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   sm: {
-    color: "#fff",
+    color: "#5c5c3d",
+  },
+  no1: {
+    flexDirection: "column",
+  },
+  no2: {
+    flexDirection: "column",
+    marginRight: 5,
+    width: 300,
+  },
+  button: {
+    display: "flex",
+    height: 60,
+    borderRadius: 6,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 200,
+    marginLeft: 20,
+    backgroundColor: "#ffcc00",
+    shadowColor: "#2AC062",
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      height: 10,
+      width: 0,
+    },
+    shadowRadius: 25,
+  },
+  closeButton: {
+    display: "flex",
+    height: 40,
+    borderRadius: 6,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FF3974",
+    shadowColor: "#2AC062",
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      height: 10,
+      width: 0,
+    },
+    shadowRadius: 25,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 22,
+  },
+  image: {
+    marginTop: 150,
+    marginBottom: 10,
+    width: "100%",
+    height: 350,
+  },
+  text: {
+    fontSize: 24,
+    marginBottom: 30,
+    padding: 40,
+  },
+  closeText: {
+    fontSize: 24,
+    color: "#00479e",
+    textAlign: "center",
+  },
+  modal: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#00ff00",
+    padding: 100,
+  },
+  text: {
+    color: "#3f2949",
+    marginTop: 10,
   },
 });
