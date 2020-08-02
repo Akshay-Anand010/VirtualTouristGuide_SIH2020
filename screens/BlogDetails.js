@@ -9,7 +9,6 @@ import {
   Alert,
   ActivityIndicator,
   Platform,
-  Button,
   Modal,
   TouchableOpacity,
 } from "react-native";
@@ -18,6 +17,11 @@ import * as Font from "expo-font";
 import ProgressBar from "react-native-progress/Bar";
 import firebase from "firebase";
 import Icon1 from "react-native-vector-icons/FontAwesome";
+import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
+import { ScrollView } from "react-native-gesture-handler";
+import Swiper from "react-native-swiper";
+
+const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 
 class Dashboard extends Component {
   state = {
@@ -187,50 +191,73 @@ class Dashboard extends Component {
 
     return (
       <View style={styles.MainContainer}>
-        <FlatList
-          data={this.state.dataSource}
-          ItemSeparatorComponent={this.FlatListItemSeparator}
-          renderItem={({ item }) => (
-            <View style={styles.flatview} elevation={5}>
-              <View style={styles.no1}>
-                <Image
-                  style={styles.tinyLogo}
-                  indicator={ProgressBar}
-                  source={{
-                    uri: item.image,
-                  }}
-                />
-              </View>
-
-              <View style={styles.no2}>
-                <Text style={styles.t1}>{item.name}</Text>
-                <Text style={styles.t2}>#{item.Tag}</Text>
-
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => this.actionOnRow(item)}
-                >
-                  <Text style={styles.buttonText}>Show Details</Text>
+        <ScrollView>
+          <Text style={styles.ht}>Hotels near you!</Text>
+          <View style={styles.con2}>
+            <Swiper>
+              <View style={styles.slideContainer}>
+                <TouchableOpacity style={styles.im}>
+                  <Image
+                    source={require("../assets/hotel.jpg")}
+                    style={styles.im}
+                  />
+                  <Text style={styles.tl}>Enjoy the Luxury!</Text>
                 </TouchableOpacity>
-
-                <View style={styles.card}>
-                  <Button
-                    title="Speak!"
-                    onPress={() => Speech.speak(item.Description)}
-                    style={styles.new1}
-                  />
-
-                  <Button
-                    title="Stop"
-                    onPress={() => Speech.stop()}
-                    style={styles.new2}
-                  />
-                </View>
               </View>
-            </View>
-          )}
-          keyExtractor={(item, index) => index}
-        />
+              <View style={[styles.slideContainer]}>
+                <TouchableOpacity style={styles.im}>
+                  <Image
+                    source={require("../assets/hotel2.jpg")}
+                    style={styles.im}
+                  />
+                  <Text>Slide 3</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.slideContainer, styles.slide3]}>
+                <TouchableOpacity style={styles.im}>
+                  <Image
+                    source={require("../assets/hotel3.jpg")}
+                    style={styles.im}
+                  />
+                  <Text>Slide 3</Text>
+                </TouchableOpacity>
+              </View>
+            </Swiper>
+          </View>
+          <Text style={styles.ht}>Monuments</Text>
+          <FlatList
+            data={this.state.dataSource}
+            ItemSeparatorComponent={this.FlatListItemSeparator}
+            renderItem={({ item }) => (
+              <View style={styles.job}>
+                <ScrollView style={styles.job1}>
+                  <Card>
+                    <Card.Title
+                      title={item.name}
+                      subtitle={item.Tag}
+                      left={LeftContent}
+                    />
+                    <Card.Content></Card.Content>
+                    <Card.Cover
+                      source={{ uri: item.image }}
+                      style={styles.ikea}
+                    />
+                    <Card.Actions>
+                      <Button onPress={() => Speech.speak(item.Description)}>
+                        Audio
+                      </Button>
+                      <Button onPress={() => Speech.stop()}>stop</Button>
+                      <Button onPress={() => this.actionOnRow(item)}>
+                        view details
+                      </Button>
+                    </Card.Actions>
+                  </Card>
+                </ScrollView>
+              </View>
+            )}
+            keyExtractor={(item, index) => index}
+          />
+        </ScrollView>
       </View>
     );
   }
@@ -239,6 +266,41 @@ class Dashboard extends Component {
 export default Dashboard;
 
 const styles = StyleSheet.create({
+  con2: {
+    flex: 1,
+    height: 200,
+  },
+  tl: {
+    fontSize: 25,
+    color: "#fff",
+  },
+  ht: {
+    fontSize: 25,
+    fontWeight: "bold",
+    marginLeft: 10,
+    color: "grey",
+  },
+  slideContainer: {
+    flex: 1,
+    height: 150,
+  },
+  slide1: {
+    backgroundColor: "rgba(20,20,200,0.3)",
+  },
+  slide2: {
+    backgroundColor: "rgba(20,200,20,0.3)",
+  },
+  slide3: {
+    backgroundColor: "rgba(200,20,20,0.3)",
+  },
+  im: {
+    width: "100%",
+  },
+  text: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "bold",
+  },
   MainContainer: {
     justifyContent: "center",
     flex: 1,
@@ -246,6 +308,14 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "ios" ? 20 : 0,
     color: "#fff",
     backgroundColor: "#fff",
+    flexDirection: "column",
+  },
+
+  job: {
+    flexDirection: "column",
+  },
+  ikea: {
+    borderRadius: 10,
   },
   flatview: {
     paddingTop: 5,
@@ -338,7 +408,7 @@ const styles = StyleSheet.create({
   },
   button: {
     display: "flex",
-    height: 60,
+    height: 40,
     borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
