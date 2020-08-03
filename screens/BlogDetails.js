@@ -244,7 +244,13 @@ class Dashboard extends Component {
                     />
                     <Card.Actions>
                       <Button onPress={() => Speech.speak(item.Description)}>
-                        Audio
+                        ENG
+                      </Button>
+                      <Button onPress={() => Speech.speak(item.Russian_desc)}>
+                        RUS
+                      </Button>
+                      <Button onPress={() => Speech.speak(item.French_Desc)}>
+                        FRENCH
                       </Button>
                       <Button onPress={() => Speech.stop()}>stop</Button>
                       <Button onPress={() => this.actionOnRow(item)}>

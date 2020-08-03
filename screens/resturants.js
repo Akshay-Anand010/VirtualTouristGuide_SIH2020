@@ -131,7 +131,7 @@ export default class Resturant extends React.Component {
               </View>
               <View style={styles.namo}>
                 <Icon1 name="location-pin" size={30} />
-                <Text style={styles.tl}>{item.Address}</Text>
+                <Text style={styles.tl}>{item.address}</Text>
               </View>
               <Button
                 style={styles.TextStyle}

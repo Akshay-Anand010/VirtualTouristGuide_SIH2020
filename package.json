@@ -60,6 +60,7 @@
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "~0.11.7",
     "react-native-web-swiper": "^2.1.7",
+    "react-native-webview": "^10.3.3",
     "react-navigation": "^4.3.9",
     "react-navigation-drawer": "^2.4.13",
     "react-navigation-material-bottom-tabs": "^2.2.12",

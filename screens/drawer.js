@@ -28,6 +28,7 @@ import Details from "./Details";
 import Hotel from "../screens/hotels";
 import sos from "../screens/sos";
 import Resturant from "../screens/resturants";
+import MyWeb from "../screens/trip";
 // firebase.initializeApp(firebaseConfig);
 
 export default class App1 extends React.Component {
@@ -137,6 +138,13 @@ const DrawerNavigator = createDrawerNavigator({
       drawerIcon: () => <Icon1 name="rest" size={20} />,
     }),
   },
+  web: {
+    screen: MyWeb,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: "Travel Tips",
+      drawerIcon: () => <Icon3 name="card-travel" size={20} />,
+    }),
+  },
   sos: {
     screen: sos,
     navigationOptions: ({ navigation }) => ({
@@ -240,6 +248,9 @@ const StackNavigator = createStackNavigator({
   },
   Resturant: {
     screen: Resturant,
+  },
+  web: {
+    screen: MyWeb,
   },
 });
 
