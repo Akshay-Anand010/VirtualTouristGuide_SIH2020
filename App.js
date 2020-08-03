@@ -21,6 +21,7 @@ import Home from "./screens/Home";
 import camera from "./screens/camera";
 import App1 from "./screens/drawer";
 import Details from "./screens/Details";
+import Hotel from "./screens/hotels";
 // firebase.initializeApp(firebaseConfig);
 
 export default class App extends React.Component {
@@ -97,14 +98,17 @@ const AppNavigator = createStackNavigator(
     loading: {
       screen: loading,
     },
-    Details:{
-      screen:Details
+    Details: {
+      screen: Details,
     },
     profile: {
       screen: Home,
     },
     camera: {
       screen: Home,
+    },
+    hotels: {
+      screen: Hotel,
     },
   },
   {

@@ -15,6 +15,8 @@ import { createStackNavigator } from "react-navigation-stack";
 import { DrawerActions } from "react-navigation-drawer";
 import Icon from "react-native-vector-icons/Ionicons";
 import Icon1 from "react-native-vector-icons/AntDesign";
+import Icon3 from "react-native-vector-icons/MaterialIcons";
+import Icon4 from "react-native-vector-icons/Feather";
 import TabNavigator from "./Blog";
 import profile from "./profile";
 import * as firebase from "firebase";
@@ -23,7 +25,9 @@ import Login from "./login";
 import chatbot from "./chatbot";
 import Home from "./Home";
 import Details from "./Details";
-
+import Hotel from "../screens/hotels";
+import sos from "../screens/sos";
+import Resturant from "../screens/resturants";
 // firebase.initializeApp(firebaseConfig);
 
 export default class App1 extends React.Component {
@@ -119,11 +123,25 @@ const DrawerNavigator = createDrawerNavigator({
       drawerIcon: () => <Ionicons name="ios-chatbubbles" size={20} />,
     }),
   },
-  share: {
-    screen: chatbot,
+  Hotels: {
+    screen: Hotel,
     navigationOptions: ({ navigation }) => ({
-      drawerLabel: "share App",
-      drawerIcon: () => <Icon1 name="sharealt" size={20} />,
+      drawerLabel: "Hotels",
+      drawerIcon: () => <Icon3 name="local-hotel" size={20} />,
+    }),
+  },
+  Resturant: {
+    screen: Resturant,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: "Resturants",
+      drawerIcon: () => <Icon1 name="rest" size={20} />,
+    }),
+  },
+  sos: {
+    screen: sos,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: "SOS",
+      drawerIcon: () => <Icon4 name="alert-triangle" size={20} />,
     }),
   },
 });
@@ -213,6 +231,15 @@ const StackNavigator = createStackNavigator({
   },
   Details: {
     screen: Details,
+  },
+  sos: {
+    screen: sos,
+  },
+  Hotel: {
+    screen: Hotel,
+  },
+  Resturant: {
+    screen: Resturant,
   },
 });
 
